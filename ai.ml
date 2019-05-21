@@ -48,6 +48,7 @@ let pp_worklist : Sill.label list -> Sill.label list -> unit
     List.iter (fun l -> Printf.printf "%d " l) wl_new;
     Printf.printf "<<\n" 
 
+(*
 let labels_of_val_sign : Val.t -> Sill.label -> Sill.label list
 = fun v maxl ->
   let rec acclst n = if n > maxl then [] else n::(acclst (n+1)) in
@@ -59,12 +60,26 @@ let cond_sign : Sill.bexp -> Mem.t -> (Mem.t * Mem.t)
 = fun b m ->
   match b with
   | _ -> (m, m) (* TODO *)
+*)
+
+let labels_of_val_const : Val.t -> Sill.label -> Sill.label list
+= fun v maxl ->
+  let rec acclst n = if n > maxl then [] else n::(acclst (n+1)) in
+  match v with
+  | Val.BOT -> []
+  | Val.TOP -> acclst 0
+  | Val.CST n -> if 0 <= n && n <= maxl then [n] else [] 
+
+let cond_const : Sill.bexp -> Mem.t -> (Mem.t * Mem.t)
+= fun b m ->
+  match b with
+  | _ -> (m, m) (* TODO *)
 
 let labels_of_val : Val.t -> Sill.label -> Sill.label list
-= labels_of_val_sign
+= labels_of_val_const (* labels_of_val_sign *)
 
 let cond : Sill.bexp -> Mem.t -> (Mem.t * Mem.t)
-= cond_sign
+= cond_const (* cond_sign *)
 
 let rec expr : Sill.exp -> Mem.t -> Val.t
 = fun e m ->

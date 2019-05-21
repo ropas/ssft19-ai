@@ -4,10 +4,10 @@
   Lab Session
   Jinyung Kim (jykim@ropas.snu.ac.kr)
 
-  Value Abstraction: Sign
+  Value Abstraction: Constant
 *)
 
-type t = BOT | TOP | NNEG | NEG
+type t = BOT | CST of int | TOP
 
 let bot : t = BOT
 let top : t = TOP
@@ -17,8 +17,7 @@ let to_string : t -> string
   match a with
   | BOT -> "."
   | TOP -> "T"
-  | NNEG -> "0+"
-  | NEG -> "-"
+  | CST n -> string_of_int n
 
 let le : t -> t -> bool
 = fun a0 a1 -> a0 = BOT || a1 = TOP || a0 = a1
@@ -30,20 +29,18 @@ let join : t -> t -> t
   match (a0, a1) with
   | (BOT, _) -> a1
   | (_, BOT) -> a0
-  | (NNEG, NNEG) -> NNEG
-  | (NEG, NEG) -> NEG
+  | (CST n1, CST n2) -> if n1 = n2 then CST n1 else TOP
   | _ -> TOP
 
 let add : t -> t -> t
 = fun a0 a1 ->
   match (a0, a1) with
   | (BOT, _) | (_, BOT) -> BOT
-  | (NNEG, NNEG) -> NNEG
-  | (NEG, NEG) -> NEG
+  | (CST n1, CST n2) -> CST (n1+n2)
   | _ -> TOP
 
 let cst : int -> t
-= fun n -> if n < 0 then NEG else NNEG
+= fun n -> CST n 
 
 (* refines v where v < w *)
 let sat_v_less_w : t -> t -> t * t
