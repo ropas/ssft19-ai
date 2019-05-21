@@ -54,6 +54,12 @@ Simple imperative language (`pgm` in `sil.ml`, eaxmples in `ex*`)
 - `ex2*`: while
 - `ex3*`: goto
 
+# Exercises
+- Add zero to the sign domain: `val.t` as `BOT | TOP | POS | ZERO | NEG`
+- Implement abstract value as constants (in const branch)
+- Add refinements in (`sat*` in `val.ml` & `cond` in `ai.ml`)
+- Implement abstract value as intervals, and add widening fuction for the domain in `ai.ml`
+
 # References
 
 - <i>Static Analysis: an Abstract Interpretation Perspective</i>, Yi and Rival, MIT Press, 2019 (to be published)
