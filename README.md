@@ -17,7 +17,7 @@ Understand and experiment with
 # Usage
 ```sh
 $ sudo apt-get install ocaml
-$ git clone https://github.com/jykim-ropas/ssft19-ai
+$ git clone https://github.com/ropas/ssft19-ai
 $ make
 $ ./run [-pponly] [target program]
 $ ./run -pponly ex0-parse-test
