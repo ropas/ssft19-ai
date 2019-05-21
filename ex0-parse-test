@@ -1,0 +1,21 @@
+input x
+;
+y := 1
+;
+if x+y < 1
+    z := 2
+    (if true
+        skip
+        (x := 0; y := 0; z := 0)
+    )
+;
+while x<10
+    x := x+1
+;
+end_label := 26
+;
+if 0 < y
+    goto end_label
+    (y := y+(-1); goto 20)
+;
+a := 0

@@ -1,0 +1,6 @@
+input x
+
+;
+
+while x < 100
+    x := 1+x

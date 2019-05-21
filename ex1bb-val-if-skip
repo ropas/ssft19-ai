@@ -1,0 +1,4 @@
+x := 1;
+if x < 0
+    (sign_x := -1; skip)
+    (if x=0 (sign_x:=0; skip) (sign_x:=1; skip))
