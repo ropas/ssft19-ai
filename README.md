@@ -14,15 +14,17 @@ Understand and experiment with
 - written in simple OCaml (avoiding functors, modules, etc)
 - not optimized for efficiency
 
-# Usage
+# Quick Build & Usage
 ```sh
 $ sudo apt-get install ocaml
 $ git clone https://github.com/ropas/ssft19-ai
+$ cd ssft19-ai
 $ make
-$ ./run [-pponly] [target program]
 $ ./run -pponly ex0-parse-test
 $ ./run ex1a-val-seq
 ```
+
+`./run [-pponly] [target program]`
 
 # Overview
 
