@@ -27,6 +27,10 @@ let join : t -> t -> t
 = fun m1 m2 ->
   fun x -> Val.join (m1 x) (m2 x)
 
+let widen : t -> t -> t
+= fun m1 m2 ->
+  fun x -> Val.widen (m1 x) (m2 x)
+
 let pp : Sill.vid list -> t -> unit
 = fun allv m ->
   print_string "{ ";

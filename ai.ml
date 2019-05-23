@@ -48,23 +48,25 @@ let pp_worklist : Sill.label list -> Sill.label list -> unit
     List.iter (fun l -> Printf.printf "%d " l) wl_new;
     Printf.printf "<<\n" 
 
-let labels_of_val_sign : Val.t -> Sill.label -> Sill.label list
+let labels_of_val_itv : Val.t -> Sill.label -> Sill.label list
 = fun v maxl ->
-  let rec acclst n = if n > maxl then [] else n::(acclst (n+1)) in
+  let v = Val.meet v (Val.V (Val.INT 0, Val.INT maxl)) in
+  let rec acclst n m = if n > m then [] else n::(acclst (n+1) m) in
   match v with
-  | Val.BOT | Val.NEG -> []
-  | Val.TOP | Val.NNEG -> acclst 0
+  | Val.BOT -> []
+  | Val.V (Val.INT i, Val.INT j) -> acclst i j
+  | _ -> raise (Failure "labels_of_val_itv")
 
-let cond_sign : Sill.bexp -> Mem.t -> (Mem.t * Mem.t)
+let cond_itv : Sill.bexp -> Mem.t -> (Mem.t * Mem.t)
 = fun b m ->
   match b with
   | _ -> (m, m) (* TODO *)
 
 let labels_of_val : Val.t -> Sill.label -> Sill.label list
-= labels_of_val_sign
+= labels_of_val_itv
 
 let cond : Sill.bexp -> Mem.t -> (Mem.t * Mem.t)
-= cond_sign
+= cond_itv
 
 let rec expr : Sill.exp -> Mem.t -> Val.t
 = fun e m ->
@@ -109,7 +111,17 @@ let rec repeat : Sill.pgm -> (Sill.vid list) -> Sill.next -> state
       (fun (state, wlst) (lnext, post) ->
         let old_post = state lnext in
           if not (Mem.le allv post old_post) then
-            (state_store state lnext (Mem.join post old_post), lnext::wlst)
+            let m_updated = 
+              if lnext == maxl then Mem.join post old_post else
+              match c with
+              | Sill.GOTO _ -> Mem.widen post old_post
+              | _ -> begin
+                match Sill.cmd_of_label p lnext with
+                | Sill.WHILE _ -> Mem.widen post old_post
+                | _ -> Mem.join post old_post
+              end
+            in
+            (state_store state lnext m_updated, lnext::wlst)
           else
             (state, wlst)
       ) (state, []) posts in
