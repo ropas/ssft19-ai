@@ -45,7 +45,7 @@ let int_min_widen : int_t -> int_t -> int_t
 = fun a0 a1 -> if int_l a0 a1 then MINF else a1
 
 let int_max_widen : int_t -> int_t -> int_t
-= fun a0 a1 -> if int_l a0 a1 then a1 else PINF
+= fun a0 a1 -> if int_le a0 a1 then a1 else PINF
 
 let int_add : int_t -> int_t -> int_t
 = fun a0 a1 ->
